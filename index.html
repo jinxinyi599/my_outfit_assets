@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服饰随机挑战器 - Art Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 极简磨砂卡片 */
+        .cloth-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cloth-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cloth-card:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        /* 悬停遮罩层 */
+        .overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cloth-card:hover .overlay {
+            opacity: 1;
+        }
+
+        /* 生成按钮动画 */
+        .btn-generate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+
+        .btn-generate:active {
+            transform: scale(0.95);
+        }
+
+        /* 占位图样式 */
+        .placeholder-img {
+            background: linear-gradient(45deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+            background-size: 200% 200%;
+            animation: gradientMove 3s infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-8">
+
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extralight mb-2 uppercase tracking-widest text-gray-300">Outfit Challenge</h1>
+        <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
+    </div>
+
+    <div id="result-container" class="flex flex-wrap justify-center gap-6 mb-16 min-h-[350px] w-full max-w-6xl">
+        <div class="text-gray-500 flex items-center italic">点击下方按钮开始挑战</div>
+    </div>
+
+    <div class="flex flex-col items-center gap-6 bg-white/5 p-8 rounded-2xl border border-white/10">
+        <div class="flex gap-8 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="mode" value="dress" checked class="accent-white"> 连衣裙模式
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="mode" value="separate" class="accent-white"> 上下装模式
+            </label>
+        </div>
+        
+        <button onclick="handleGenerate()" class="btn-generate bg-white text-black px-12 py-4 rounded-full font-bold uppercase hover:bg-gray-200">
+            随机挑战
+        </button>
+    </div>
+
+    <script>
+        // 1. 模拟数据（实际开发时可替换为 API 数据）
+        const mockItems = [
+            { id: '1', name: '夜色丝绒长裙', category: 'dress', img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400' },
+            { id: '2', name: '廓形西装上衣', category: 'top', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400' },
+            { id: '3', name: '高腰阔腿裤', category: 'bottom', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400' },
+            { id: '4', name: '银色月光发带', category: 'acc_hair', img: 'https://images.unsplash.com/photo-1576487222758-f4099b91749c?w=400' },
+            { id: '5', name: '冷淡风颈圈', category: 'acc_neck', img: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400' },
+            { id: '6', name: '极简切尔西靴', category: 'shoes', img: 'https://images.unsplash.com/photo-1638247025967-b4e38f787b76?w=400' }
+        ];
+
+        // 2. 核心算法 (按照你提供的逻辑规范)
+        function generate(config) {
+            const mainCats = ['hair', 'dress', 'top', 'bottom', 'shoes'];
+            
+            // 互斥处理
+            let availableMain = config.dressMode === 'dress' 
+                ? mainCats.filter(c => c !== 'top' && c !== 'bottom')
+                : mainCats.filter(c => c !== 'dress');
+
+            // 简单随机抽取分类
+            const pickedMain = availableMain.sort(() => 0.5 - Math.random()).slice(0, 2);
+            const pickedAcc = ['acc_hair', 'acc_neck'].sort(() => 0.5 - Math.random()).slice(0, 1);
+
+            const result = [];
+            [...pickedMain, ...pickedAcc].forEach(cat => {
+                const item = mockItems.find(i => i.category === cat);
+                if(item) result.push(item);
+            });
+            return result;
+        }
+
+        // 3. UI 交互
+        async function handleGenerate() {
+            const container = document.getElementById('result-container');
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            
+            // 清空旧内容
+            container.innerHTML = '';
+
+            // 生成结果
+            const items = generate({ dressMode: mode });
+
+            // 依次渲染卡片并添加动画
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const card = document.createElement('div');
+                card.className = 'cloth-card w-64 h-80 rounded-xl relative group';
+                card.innerHTML = `
+                    < img src="${item.img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="overlay absolute inset-0 flex flex-col justify-end p-6 text-white">
+                        <span class="text-[10px] uppercase tracking-[0.2em] opacity-60 mb-1">${item.category}</span>
+                        <h3 class="text-lg font-light tracking-wide">${item.name}</h3>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                
+                // 触发入场动画
+                setTimeout(() => card.classList.add('show'), i * 150);
+            }
+        }
+    </script>
+</body>
+</html>
