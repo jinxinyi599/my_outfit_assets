@@ -36,8 +36,7 @@
 
         .floating-bubble {
             position: absolute;
-            top: 105%; 
-            left: 50%;
+            top: 105%; left: 50%;
             transform: translateX(-50%) translateY(10px);
             width: 125%; 
             background: rgba(255, 255, 255, 0.98);
@@ -45,8 +44,7 @@
             border-radius: 12px;
             padding: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            opacity: 0;
-            visibility: hidden;
+            opacity: 0; visibility: hidden;
             transition: all 0.3s ease;
             z-index: 100;
             backdrop-filter: blur(5px);
@@ -61,25 +59,14 @@
         .panel-content { transition: all 0.3s ease; }
         .hidden-panel { display: none; }
 
-        .btn-main { background: var(--accent-purple); box-shadow: 0px 4px 0px #3d1e2e; transition: all 0.2s; }
+        .btn-main { background: var(--accent-purple); box-shadow: 0px 4px 0px #3d1e2e; transition: all 0.2s; color: white; }
         .btn-main:active { transform: translateY(2px); box-shadow: 0px 1px 0px #3d1e2e; }
 
         #right-panel::-webkit-scrollbar { width: 6px; }
         #right-panel::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
 
-        .afd-link {
-            color: #FF69B4;
-            font-weight: 900;
-            text-decoration: underline;
-            transition: all 0.3s;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-        .afd-link:hover {
-            background-color: #FF69B4;
-            color: white;
-            text-decoration: none;
-        }
+        .afd-link { color: #FF69B4; font-weight: 900; text-decoration: underline; transition: all 0.3s; padding: 2px 4px; border-radius: 4px; }
+        .afd-link:hover { background-color: #FF69B4; color: white; text-decoration: none; }
     </style>
 </head>
 <body class="min-h-screen py-8 px-4">
@@ -94,12 +81,8 @@
             </div>
 
             <div class="mt-10 flex items-center gap-4">
-                <button onclick="handleGenerate()" class="btn-main text-white px-10 py-3 rounded-full font-black text-lg tracking-wider">
-                    开始随机
-                </button>
-                <button onclick="toggleRightContent()" class="p-3 bg-white border-2 border-purple-800 rounded-full hover:rotate-90 transition-transform duration-500 shadow-sm text-lg" title="细节筛选">
-                    ⚙️
-                </button>
+                <button onclick="handleGenerate()" class="btn-main px-10 py-3 rounded-full font-black text-lg tracking-wider">开始随机</button>
+                <button onclick="toggleRightContent()" class="p-3 bg-white border-2 border-purple-800 rounded-full hover:rotate-90 transition-transform duration-500 shadow-sm text-lg" title="细节筛选">⚙️</button>
             </div>
         </div>
 
@@ -107,18 +90,14 @@
             
             <div id="info-content" class="panel-content space-y-5 text-sm leading-relaxed text-purple-900/80">
                 <h2 class="text-2xl font-black border-b-2 border-pink-200 pb-2 text-purple-900">✨ 网站说明</h2>
-                
                 <p class="font-bold text-base text-purple-900">欢迎大家使用无限暖暖随机服装挑战生成器！</p>
-                
                 <p>在这里你可以随机服饰，我会为你随机生成1~3件非同一部位的服饰，你可以进行搭配挑战，染色或者独具风格的穿搭让你的搭配看起来更加炫酷！</p>
-                
                 <p>非常欢迎大家使用并分享到社交平台！期待大家的友好使用和交流！</p>
                 
                 <div class="bg-pink-100/60 p-5 rounded-2xl border border-pink-200 space-y-3">
                     <p>如果你想支持我，请订阅我的爱发电：<a href="https://afdian.com/a/JINJIUMI" target="_blank" class="afd-link">JIN</a>，我会接受大家的建议并采纳！</p>
                     <p class="text-xs italic opacity-70">呜呜一个人数据统计和注入图片不易，非常感谢大家的支持!</p>
                 </div>
-
                 <p class="text-[11px] opacity-60 pt-4 border-t border-purple-100">如有侵权非常感谢可以提醒我！我会非常快速地处理！</p>
             </div>
 
@@ -182,16 +161,7 @@
         const UI_URL = RAW_BASE + "ui/";
 
         const CATEGORY_MAP = {
-            // 这里已经加入了 外套 (out)
-            main: [
-                {id:'hair',n:'发型'},
-                {id:'out',n:'外套'},
-                {id:'dress',n:'连衣裙'},
-                {id:'top',n:'上衣'},
-                {id:'bottom',n:'下装'},
-                {id:'socks',n:'袜子'},
-                {id:'shoes',n:'鞋子'}
-            ],
+            main: [{id:'hair',n:'发型'},{id:'out',n:'外套'},{id:'dress',n:'连衣裙'},{id:'top',n:'上衣'},{id:'bottom',n:'下装'},{id:'socks',n:'袜子'},{id:'shoes',n:'鞋子'}],
             acc: [{id:'acc_hair',n:'发饰'},{id:'acc_hat',n:'帽子'},{id:'acc_ear',n:'耳饰'},{id:'acc_neck',n:'颈饰'},{id:'acc_wrist',n:'腕饰'},{id:'acc_choker',n:'项圈'},{id:'acc_glove',n:'手套'},{id:'acc_face',n:'面饰'},{id:'acc_chest',n:'胸饰'},{id:'acc_pendant',n:'挂饰'},{id:'acc_back',n:'背饰'},{id:'acc_ring',n:'戒指'},{id:'acc_arm',n:'臂饰'},{id:'acc_handheld',n:'手持物'},{id:'acc_paint',n:'绘肤'}]
         };
 
@@ -204,15 +174,18 @@
             };
             render('main', CATEGORY_MAP.main, true);
             render('acc', CATEGORY_MAP.acc, false);
+            updateVal('main'); updateVal('acc');
         }
 
         function toggleGroup(g, isChecked) {
             document.querySelectorAll(`.${g}-item`).forEach(i => i.checked = isChecked);
+            updateVal(g);
         }
 
         function updateParent(g) {
             const items = document.querySelectorAll(`.${g}-item`);
-            document.getElementById(`all-${g}`).checked = [...items].every(i => i.checked);
+            document.getElementById(`all-${g}`).checked = [...items].every(i => i.checked) && items.length > 0;
+            updateVal(g);
         }
 
         function toggleRightContent() {
@@ -220,29 +193,88 @@
             document.getElementById('filter-content').classList.toggle('hidden-panel');
         }
 
-        function handleGenerate() {
-            if (typeof CLOTH_DATABASE === 'undefined') return alert("未找到数据");
-            let pMain = [...document.querySelectorAll('.main-item:checked')].map(e => e.dataset.id);
-            let pAcc = [...document.querySelectorAll('.acc-item:checked')].map(e => e.dataset.id);
-            if (!pMain.length && !pAcc.length) return alert("请在细节筛选中勾选分类！");
+        // 核心修复：更新显示的数值，但不改变滑块的固定 max 值 (3)
+        function updateVal(t) {
+            const slider = document.getElementById(`${t}-limit`);
+            const valSpan = document.getElementById(`${t}-val`);
+            const checkedCount = document.querySelectorAll(`.${t}-item:checked`).length;
 
-            let nMain = parseInt(document.getElementById('main-limit').value);
-            let nAcc = parseInt(document.getElementById('acc-limit').value);
-            const pick = (arr, n) => arr.sort(() => 0.5 - Math.random()).slice(0, n);
-            renderResult([...pick(pMain, nMain), ...pick(pAcc, nAcc)]);
+            // 只有当勾选的分类极少（比如只勾了1个）时，滑块值才会被动降低
+            if (parseInt(slider.value) > checkedCount && checkedCount > 0) {
+                slider.value = checkedCount;
+            }
+            
+            valSpan.innerText = slider.value;
+        }
+
+        function handleGenerate() {
+            if (typeof CLOTH_DATABASE === 'undefined') return alert("数据加载中...");
+            const nMain = parseInt(document.getElementById('main-limit').value);
+            const nAcc = parseInt(document.getElementById('acc-limit').value);
+            const pMain = [...document.querySelectorAll('.main-item:checked')].map(e => e.dataset.id);
+            const pAcc = [...document.querySelectorAll('.acc-item:checked')].map(e => e.dataset.id);
+
+            const shuffle = (arr) => [...arr].sort(() => 0.5 - Math.random());
+
+            function pickFixed(pool, n, isMain) {
+                if (n <= 0) return [];
+                const validPool = pool.filter(catId => CLOTH_DATABASE.some(d => d.cat === catId));
+                
+                // 确定目标件数：不能超过选中的分类总数，且尽量满足滑块要求的 n
+                const target = Math.min(n, validPool.length);
+                
+                let selected = [];
+                let attempts = 0;
+
+                // 强制凑齐逻辑：通过 100 次洗牌尝试寻找不冲突的组合
+                while (attempts < 100) {
+                    let temp = [];
+                    let shuffled = shuffle(validPool);
+                    for (let catId of shuffled) {
+                        if (temp.length >= target) break;
+                        if (isMain) {
+                            const hasDress = temp.includes('dress');
+                            const hasTopBot = temp.includes('top') || temp.includes('bottom');
+                            // 互斥跳过
+                            if (catId === 'dress' && hasTopBot) continue;
+                            if ((catId === 'top' || catId === 'bottom') && hasDress) continue;
+                        }
+                        temp.push(catId);
+                    }
+                    
+                    // 如果这轮洗牌凑够了 target 件数，就成功
+                    if (temp.length >= target) {
+                        selected = temp;
+                        break;
+                    }
+                    attempts++;
+                    // 如果死活凑不到 target（比如勾了头发、裙子、上衣却非要3件），则在最后一次尝试中接受最大可能值
+                    if (attempts === 100) selected = temp;
+                }
+                return selected;
+            }
+
+            const finalSelection = [...pickFixed(pMain, nMain, true), ...pickFixed(pAcc, nAcc, false)];
+            renderResult(finalSelection);
         }
 
         function renderResult(selection) {
             const container = document.getElementById('result-container');
             container.innerHTML = '';
-            selection.forEach((cat, i) => {
+            
+            if (selection.length === 0) {
+                container.innerHTML = '<div class="text-white/60 font-bold italic text-xl">请勾选分类并随机</div>';
+                return;
+            }
+
+            selection.forEach(cat => {
                 const pool = CLOTH_DATABASE.filter(d => d.cat === cat);
                 if (!pool.length) return;
                 const item = pool[Math.floor(Math.random() * pool.length)];
                 const card = document.createElement('div');
                 card.className = 'cloth-card w-44 h-60 show group';
                 card.innerHTML = `
-                    <img src="${IMG_URL}${item.img}" class="w-full h-full object-cover rounded-[17px]">
+                    <img src="${IMG_URL}${item.img}" class="w-full h-full object-cover rounded-[17px]" onerror="this.src='https://via.placeholder.com/176x240?text=图片丢失'">
                     <div class="floating-bubble">
                         <div class="bubble-content">
                             <div class="flex items-center gap-2">
@@ -250,7 +282,7 @@
                                 <img src="${UI_URL}star${item.star}.png" class="h-3" onerror="this.style.display='none'">
                             </div>
                             <div class="flex flex-wrap gap-1 mt-1">
-                                ${(item.tags || []).map(t => `<img src="${UI_URL}tag_${t}.png" class="h-5" alt="${t}">`).join('')}
+                                ${(item.tags || []).map(t => `<img src="${UI_URL}tag_${t}.png" class="h-5">`).join('')}
                             </div>
                         </div>
                     </div>
@@ -258,8 +290,6 @@
                 container.appendChild(card);
             });
         }
-
-        function updateVal(t) { document.getElementById(`${t}-val`).innerText = document.getElementById(`${t}-limit`).value; }
         init();
     </script>
 </body>
