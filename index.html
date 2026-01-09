@@ -16,11 +16,13 @@
             background-image: radial-gradient(var(--highlight-pink) 0.5px, transparent 0.5px); 
             background-size: 20px 20px; 
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .title-text { font-weight: 900; text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6); }
 
-        /* 卡片基础样式 */
         .cloth-card { 
             background: white; 
             border: 3px solid var(--accent-purple); 
@@ -32,13 +34,12 @@
         }
         .cloth-card.show { opacity: 1; transform: translateY(0); }
 
-        /* 气泡样式：内容左对齐，气泡居中 */
         .floating-bubble {
             position: absolute;
             top: 105%; 
             left: 50%;
             transform: translateX(-50%) translateY(10px);
-            width: 120%; 
+            width: 125%; 
             background: rgba(255, 255, 255, 0.98);
             border: 2px solid var(--accent-purple);
             border-radius: 12px;
@@ -60,15 +61,28 @@
         .panel-content { transition: all 0.3s ease; }
         .hidden-panel { display: none; }
 
-        /* 按钮样式 */
         .btn-main { background: var(--accent-purple); box-shadow: 0px 4px 0px #3d1e2e; transition: all 0.2s; }
         .btn-main:active { transform: translateY(2px); box-shadow: 0px 1px 0px #3d1e2e; }
 
         #right-panel::-webkit-scrollbar { width: 6px; }
         #right-panel::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
+
+        .afd-link {
+            color: #FF69B4;
+            font-weight: 900;
+            text-decoration: underline;
+            transition: all 0.3s;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .afd-link:hover {
+            background-color: #FF69B4;
+            color: white;
+            text-decoration: none;
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen py-8 px-4">
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full max-w-[1400px] bg-white/30 backdrop-blur-sm rounded-[3rem] p-8 border-4 border-white shadow-2xl">
         
@@ -91,27 +105,26 @@
 
         <div id="right-panel" class="lg:col-span-4 bg-white/80 rounded-[2.5rem] p-8 border-2 border-white shadow-inner overflow-y-auto max-h-[750px]">
             
-            <div id="info-content" class="panel-content space-y-6">
-                <h2 class="text-2xl font-black border-b-2 border-pink-200 pb-2">✨ 网站说明</h2>
-                <div class="space-y-4 text-[13px] leading-relaxed text-purple-900/80">
-                    <p class="font-bold text-base text-purple-900">欢迎大家使用无限暖暖随机服装挑战生成器！</p>
-                    
-                    <p>在这里你可以随机服饰，我会为你随机生成1~3件非同一部位的服饰，你可以进行搭配挑战，染色或者独具风格的穿搭让你的搭配看起来更加炫酷！</p>
-                    
-                    <p>非常欢迎大家使用并分享到社交平台！期待大家的友好使用和交流！</p>
-                    
-                    <div class="bg-pink-100/50 p-4 rounded-xl border border-pink-200">
-                        <p class="mb-2">如果你想支持我，请订阅我的爱发电：<span class="font-black text-pink-600">JIN</span>，我会接受大家的建议并采纳！</p>
-                        <p class="text-xs italic opacity-70">呜呜一个一个贴图非常不易，感谢大家支持！</p>
-                    </div>
-
-                    <p class="text-[11px] opacity-60 pt-4 border-t border-purple-100">如有侵权非常感谢可以提醒我！我会非常快速地处理！</p>
+            <div id="info-content" class="panel-content space-y-5 text-sm leading-relaxed text-purple-900/80">
+                <h2 class="text-2xl font-black border-b-2 border-pink-200 pb-2 text-purple-900">✨ 网站说明</h2>
+                
+                <p class="font-bold text-base text-purple-900">欢迎大家使用无限暖暖随机服装挑战生成器！</p>
+                
+                <p>在这里你可以随机服饰，我会为你随机生成1~3件非同一部位的服饰，你可以进行搭配挑战，染色或者独具风格的穿搭让你的搭配看起来更加炫酷！</p>
+                
+                <p>非常欢迎大家使用并分享到社交平台！期待大家的友好使用和交流！</p>
+                
+                <div class="bg-pink-100/60 p-5 rounded-2xl border border-pink-200 space-y-3">
+                    <p>如果你想支持我，请订阅我的爱发电：<a href="https://afdian.com/a/JINJIUMI" target="_blank" class="afd-link">JIN</a>，我会接受大家的建议并采纳！</p>
+                    <p class="text-xs italic opacity-70">呜呜一个人数据统计和注入图片不易，非常感谢大家的支持!</p>
                 </div>
+
+                <p class="text-[11px] opacity-60 pt-4 border-t border-purple-100">如有侵权非常感谢可以提醒我！我会非常快速地处理！</p>
             </div>
 
             <div id="filter-content" class="panel-content hidden-panel space-y-6">
                 <div class="flex justify-between items-center border-b-2 border-purple-200 pb-2">
-                    <h2 class="text-xl font-black">⚙️ 细节筛选</h2>
+                    <h2 class="text-xl font-black text-purple-900">⚙️ 细节筛选</h2>
                     <button onclick="toggleRightContent()" class="text-xs font-bold text-pink-500 hover:underline">返回说明</button>
                 </div>
                 
@@ -153,6 +166,14 @@
         </div>
     </div>
 
+    <footer class="w-full text-center py-8 mt-4 opacity-50 text-[10px] md:text-[11px] leading-relaxed max-w-4xl mx-auto px-6">
+        <div class="border-t border-white/40 pt-6 space-y-2">
+            <p class="font-bold text-purple-900/80 uppercase tracking-widest">Copyright & Disclaimer</p>
+            <p>本站为《无限暖暖》非盈利同人工具，仅供穿搭灵感交流使用。本站所使用的游戏美术资产版权均归原权利人（叠纸游戏/Papergames）所有。</p>
+            <p>所得款项将仅用于服务器成本及开发者劳动力补贴，并非素材之售卖。本站与官方无关，如有侵权请联系开发者（JIN）处理。</p>
+        </div>
+    </footer>
+
     <script src="data.js"></script>
 
     <script>
@@ -161,7 +182,16 @@
         const UI_URL = RAW_BASE + "ui/";
 
         const CATEGORY_MAP = {
-            main: [{id:'hair',n:'发型'},{id:'dress',n:'连衣裙'},{id:'top',n:'上衣'},{id:'bottom',n:'下装'},{id:'socks',n:'袜子'},{id:'shoes',n:'鞋子'}],
+            // 这里已经加入了 外套 (out)
+            main: [
+                {id:'hair',n:'发型'},
+                {id:'out',n:'外套'},
+                {id:'dress',n:'连衣裙'},
+                {id:'top',n:'上衣'},
+                {id:'bottom',n:'下装'},
+                {id:'socks',n:'袜子'},
+                {id:'shoes',n:'鞋子'}
+            ],
             acc: [{id:'acc_hair',n:'发饰'},{id:'acc_hat',n:'帽子'},{id:'acc_ear',n:'耳饰'},{id:'acc_neck',n:'颈饰'},{id:'acc_wrist',n:'腕饰'},{id:'acc_choker',n:'项圈'},{id:'acc_glove',n:'手套'},{id:'acc_face',n:'面饰'},{id:'acc_chest',n:'胸饰'},{id:'acc_pendant',n:'挂饰'},{id:'acc_back',n:'背饰'},{id:'acc_ring',n:'戒指'},{id:'acc_arm',n:'臂饰'},{id:'acc_handheld',n:'手持物'},{id:'acc_paint',n:'绘肤'}]
         };
 
