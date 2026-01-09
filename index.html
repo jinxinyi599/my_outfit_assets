@@ -3,90 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outfit Challenge - Style Generator</title>
+    <title>无限暖暖随机服装生成器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
         :root { --bg-pink: #FFD1DC; --accent-purple: #5D2E46; --highlight-pink: #FF69B4; }
-        body { background-color: var(--bg-pink); color: var(--accent-purple); font-family: 'Nunito', sans-serif; background-image: radial-gradient(var(--highlight-pink) 0.5px, transparent 0.5px); background-size: 20px 20px; }
-        .title-text { font-weight: 900; text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.6); }
         
+        body { 
+            background-color: var(--bg-pink); 
+            color: var(--accent-purple); 
+            font-family: 'Nunito', sans-serif; 
+            background-image: radial-gradient(var(--highlight-pink) 0.5px, transparent 0.5px); 
+            background-size: 20px 20px; 
+            overflow-x: hidden;
+        }
+
+        .title-text { font-weight: 900; text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6); }
+
+        /* 卡片基础样式 */
         .cloth-card { 
             background: white; 
             border: 3px solid var(--accent-purple); 
-            border-radius: 24px; 
-            box-shadow: 8px 8px 0px var(--accent-purple); 
-            overflow: hidden;
+            border-radius: 20px; 
+            box-shadow: 6px 6px 0px var(--accent-purple); 
             position: relative;
-            opacity: 0; transform: translateY(30px);
+            opacity: 0; transform: translateY(20px);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
         }
         .cloth-card.show { opacity: 1; transform: translateY(0); }
 
-        .info-overlay {
+        /* 气泡样式：内容左对齐，气泡居中 */
+        .floating-bubble {
             position: absolute;
-            inset: 0;
-            background: rgba(93, 46, 70, 0.9); 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            opacity: 0; 
+            top: 105%; 
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 120%; 
+            background: rgba(255, 255, 255, 0.98);
+            border: 2px solid var(--accent-purple);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
             transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-            z-index: 10;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        .bubble-content { text-align: left; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+
+        .cloth-card:hover .floating-bubble {
+            opacity: 1; visibility: visible;
+            transform: translateX(-50%) translateY(15px);
         }
 
-        .cloth-card:hover .info-overlay { opacity: 1; }
-        .cloth-card:hover .main-img { transform: scale(1.1); }
+        .panel-content { transition: all 0.3s ease; }
+        .hidden-panel { display: none; }
 
-        #filter-panel { max-height: 0; overflow: hidden; transition: max-height 0.6s ease; }
-        #filter-panel.open { max-height: 1500px; padding-bottom: 2rem; }
-        .btn-main { background: var(--accent-purple); box-shadow: 0px 6px 0px #3d1e2e; transition: all 0.2s; }
-        .btn-main:active { transform: translateY(4px); box-shadow: 0px 2px 0px #3d1e2e; }
-        input[type="checkbox"], input[type="range"] { accent-color: var(--accent-purple); }
-        .random-toggle-active { background: var(--highlight-pink) !important; color: white !important; border-color: transparent !important; }
+        /* 按钮样式 */
+        .btn-main { background: var(--accent-purple); box-shadow: 0px 4px 0px #3d1e2e; transition: all 0.2s; }
+        .btn-main:active { transform: translateY(2px); box-shadow: 0px 1px 0px #3d1e2e; }
+
+        #right-panel::-webkit-scrollbar { width: 6px; }
+        #right-panel::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-10 px-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <h1 class="title-text text-5xl md:text-6xl mb-10 uppercase italic text-center">Style Generator</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full max-w-[1400px] bg-white/30 backdrop-blur-sm rounded-[3rem] p-8 border-4 border-white shadow-2xl">
+        
+        <div class="lg:col-span-8 flex flex-col items-center justify-between min-h-[750px] py-4">
+            <h1 class="title-text text-4xl mb-6">无限暖暖随机服装生成器</h1>
+            
+            <div id="result-container" class="flex flex-wrap justify-center gap-14 w-full flex-grow content-center p-4">
+                <div class="flex items-center justify-center border-4 border-dashed border-white rounded-[2rem] w-48 h-64 text-white font-black text-6xl opacity-60">?</div>
+            </div>
 
-    <div id="result-container" class="flex flex-wrap justify-center gap-8 mb-12 min-h-[350px] w-full max-w-7xl">
-        <div class="flex items-center justify-center border-4 border-dashed border-white/50 rounded-[3rem] w-56 h-72 text-white font-black text-6xl">?</div>
-    </div>
-
-    <div class="w-full max-w-4xl flex flex-col items-center gap-6">
-        <div class="flex gap-4">
-            <button onclick="handleGenerate()" class="btn-main text-white px-12 py-5 rounded-full font-black text-2xl tracking-widest">START</button>
-            <button onclick="toggleFilter()" class="bg-white/50 border-2 border-current px-8 py-5 rounded-full font-black text-lg hover:bg-white transition-all shadow-sm">细节筛选 ⚙️</button>
+            <div class="mt-10 flex items-center gap-4">
+                <button onclick="handleGenerate()" class="btn-main text-white px-10 py-3 rounded-full font-black text-lg tracking-wider">
+                    开始随机
+                </button>
+                <button onclick="toggleRightContent()" class="p-3 bg-white border-2 border-purple-800 rounded-full hover:rotate-90 transition-transform duration-500 shadow-sm text-lg" title="细节筛选">
+                    ⚙️
+                </button>
+            </div>
         </div>
 
-        <div id="filter-panel" class="w-full mt-4 bg-white/70 backdrop-blur-md rounded-[3rem] border-2 border-white shadow-2xl">
-            <div class="p-10">
-                <div class="flex justify-center mb-10">
-                    <button id="chaos-btn" onclick="toggleChaosMode()" class="border-4 border-purple-800 px-10 py-3 rounded-full font-black italic bg-white/50">✨ 全随机模式</button>
+        <div id="right-panel" class="lg:col-span-4 bg-white/80 rounded-[2.5rem] p-8 border-2 border-white shadow-inner overflow-y-auto max-h-[750px]">
+            
+            <div id="info-content" class="panel-content space-y-6">
+                <h2 class="text-2xl font-black border-b-2 border-pink-200 pb-2">✨ 网站说明</h2>
+                <div class="space-y-4 text-[13px] leading-relaxed text-purple-900/80">
+                    <p class="font-bold text-base text-purple-900">欢迎大家使用无限暖暖随机服装挑战生成器！</p>
+                    
+                    <p>在这里你可以随机服饰，我会为你随机生成1~3件非同一部位的服饰，你可以进行搭配挑战，染色或者独具风格的穿搭让你的搭配看起来更加炫酷！</p>
+                    
+                    <p>非常欢迎大家使用并分享到社交平台！期待大家的友好使用和交流！</p>
+                    
+                    <div class="bg-pink-100/50 p-4 rounded-xl border border-pink-200">
+                        <p class="mb-2">如果你想支持我，请订阅我的爱发电：<span class="font-black text-pink-600">JIN</span>，我会接受大家的建议并采纳！</p>
+                        <p class="text-xs italic opacity-70">呜呜一个一个贴图非常不易，感谢大家支持！</p>
+                    </div>
+
+                    <p class="text-[11px] opacity-60 pt-4 border-t border-purple-100">如有侵权非常感谢可以提醒我！我会非常快速地处理！</p>
                 </div>
-                <div id="sliders-container" class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-10 pb-10 border-b-2 border-purple-200">
-                    <div>
-                        <span class="font-black text-2xl italic">主要服饰: <span id="main-val" class="bg-[#5D2E46] text-white px-4 py-1 rounded-full text-lg ml-2">1</span></span>
-                        <input type="range" id="main-limit" min="1" max="3" value="1" class="w-full mt-4" oninput="updateVal('main')">
-                    </div>
-                    <div>
-                        <span class="font-black text-2xl italic">饰品数量: <span id="acc-val" class="bg-[#5D2E46] text-white px-4 py-1 rounded-full text-lg ml-2">0</span></span>
-                        <input type="range" id="acc-limit" min="0" max="3" value="0" class="w-full mt-4" oninput="updateVal('acc')">
-                    </div>
+            </div>
+
+            <div id="filter-content" class="panel-content hidden-panel space-y-6">
+                <div class="flex justify-between items-center border-b-2 border-purple-200 pb-2">
+                    <h2 class="text-xl font-black">⚙️ 细节筛选</h2>
+                    <button onclick="toggleRightContent()" class="text-xs font-bold text-pink-500 hover:underline">返回说明</button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    <div>
-                        <div class="flex items-center gap-3 mb-6 font-black text-2xl italic"><input type="checkbox" id="all-main" checked onchange="toggleGroup('main', this.checked)"> 主要服饰</div>
-                        <div id="main-list" class="flex flex-wrap gap-4 font-bold"></div>
+                
+                <div class="space-y-6">
+                    <div class="grid gap-4 bg-white/60 p-4 rounded-2xl border border-pink-50">
+                        <div>
+                            <span class="font-black text-sm italic">主要服饰数量: <span id="main-val" class="text-pink-600">1</span></span>
+                            <input type="range" id="main-limit" min="1" max="3" value="1" class="w-full mt-2" oninput="updateVal('main')">
+                        </div>
+                        <div>
+                            <span class="font-black text-sm italic">饰品数量: <span id="acc-val" class="text-pink-600">0</span></span>
+                            <input type="range" id="acc-limit" min="0" max="3" value="0" class="w-full mt-2" oninput="updateVal('acc')">
+                        </div>
                     </div>
-                    <div>
-                        <div class="flex items-center gap-3 mb-6 font-black text-2xl italic"><input type="checkbox" id="all-acc" onchange="toggleGroup('acc', this.checked)"> 额外饰品</div>
-                        <div id="acc-list" class="flex flex-wrap gap-4 font-bold"></div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-black text-sm border-l-4 border-pink-400 pl-2">主要服饰分类</span>
+                                <label class="text-[10px] flex items-center gap-1 cursor-pointer font-bold bg-pink-50 px-2 py-0.5 rounded-md">
+                                    <input type="checkbox" id="all-main" checked onchange="toggleGroup('main', this.checked)"> 全选
+                                </label>
+                            </div>
+                            <div id="main-list" class="flex flex-wrap gap-1.5"></div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-black text-sm border-l-4 border-pink-400 pl-2">额外饰品分类</span>
+                                <label class="text-[10px] flex items-center gap-1 cursor-pointer font-bold bg-pink-50 px-2 py-0.5 rounded-md">
+                                    <input type="checkbox" id="all-acc" onchange="toggleGroup('acc', this.checked)"> 全选
+                                </label>
+                            </div>
+                            <div id="acc-list" class="flex flex-wrap gap-1.5"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,10 +156,8 @@
     <script src="data.js"></script>
 
     <script>
-        // 1. 这里的路径如果用 RAW_BASE，请确保 data.js 里的 img 不带 "images/" 前缀
-        // 如果你的 data.js 已经带了 "images/"，就把这里的 "images/" 删掉
         const RAW_BASE = "https://raw.githubusercontent.com/jinxinyi599/my_outfit_assets/main/";
-        const IMG_URL = RAW_BASE + "images/"; 
+        const IMG_URL = RAW_BASE + "images/";
         const UI_URL = RAW_BASE + "ui/";
 
         const CATEGORY_MAP = {
@@ -107,12 +165,10 @@
             acc: [{id:'acc_hair',n:'发饰'},{id:'acc_hat',n:'帽子'},{id:'acc_ear',n:'耳饰'},{id:'acc_neck',n:'颈饰'},{id:'acc_wrist',n:'腕饰'},{id:'acc_choker',n:'项圈'},{id:'acc_glove',n:'手套'},{id:'acc_face',n:'面饰'},{id:'acc_chest',n:'胸饰'},{id:'acc_pendant',n:'挂饰'},{id:'acc_back',n:'背饰'},{id:'acc_ring',n:'戒指'},{id:'acc_arm',n:'臂饰'},{id:'acc_handheld',n:'手持物'},{id:'acc_paint',n:'绘肤'}]
         };
 
-        let isChaosMode = false;
-
         function init() {
             const render = (gid, data, isDef) => {
                 document.getElementById(`${gid}-list`).innerHTML = data.map(c => `
-                    <label class="flex items-center gap-2 bg-white px-4 py-1.5 rounded-full border border-purple-100 hover:border-pink-400 cursor-pointer shadow-sm">
+                    <label class="flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-pink-100 hover:border-pink-300 cursor-pointer text-[11px] shadow-sm">
                         <input type="checkbox" class="${gid}-item" data-id="${c.id}" ${isDef ? 'checked' : ''} onchange="updateParent('${gid}')"> ${c.n}
                     </label>`).join('');
             };
@@ -120,15 +176,28 @@
             render('acc', CATEGORY_MAP.acc, false);
         }
 
+        function toggleGroup(g, isChecked) {
+            document.querySelectorAll(`.${g}-item`).forEach(i => i.checked = isChecked);
+        }
+
+        function updateParent(g) {
+            const items = document.querySelectorAll(`.${g}-item`);
+            document.getElementById(`all-${g}`).checked = [...items].every(i => i.checked);
+        }
+
+        function toggleRightContent() {
+            document.getElementById('info-content').classList.toggle('hidden-panel');
+            document.getElementById('filter-content').classList.toggle('hidden-panel');
+        }
+
         function handleGenerate() {
-            if (typeof CLOTH_DATABASE === 'undefined') return alert("未找到 data.js 文件！");
+            if (typeof CLOTH_DATABASE === 'undefined') return alert("未找到数据");
             let pMain = [...document.querySelectorAll('.main-item:checked')].map(e => e.dataset.id);
             let pAcc = [...document.querySelectorAll('.acc-item:checked')].map(e => e.dataset.id);
-            if (!pMain.length && !pAcc.length) return alert("请先勾选分类！");
+            if (!pMain.length && !pAcc.length) return alert("请在细节筛选中勾选分类！");
 
             let nMain = parseInt(document.getElementById('main-limit').value);
             let nAcc = parseInt(document.getElementById('acc-limit').value);
-
             const pick = (arr, n) => arr.sort(() => 0.5 - Math.random()).slice(0, n);
             renderResult([...pick(pMain, nMain), ...pick(pAcc, nAcc)]);
         }
@@ -136,43 +205,31 @@
         function renderResult(selection) {
             const container = document.getElementById('result-container');
             container.innerHTML = '';
-            
             selection.forEach((cat, i) => {
                 const pool = CLOTH_DATABASE.filter(d => d.cat === cat);
                 if (!pool.length) return;
                 const item = pool[Math.floor(Math.random() * pool.length)];
-
                 const card = document.createElement('div');
-                card.className = 'cloth-card w-56 h-72 group';
-                
-                // 重点修复：去掉了 <img 间的空格，处理了 tags 容错
+                card.className = 'cloth-card w-44 h-60 show group';
                 card.innerHTML = `
-                    <img src="${IMG_URL}${item.img}" class="main-img w-full h-full object-cover transition-transform duration-500">
-                    
-                    <div class="info-overlay">
-                        <img src="${UI_URL}star${item.star}.png" class="w-24 mb-3" onerror="this.style.visibility='hidden'">
-                        <h3 class="text-white font-black text-xl mb-4 text-center">${item.name}</h3>
-                        <div class="flex flex-wrap justify-center gap-2">
-                            ${(item.tags || []).map(t => `<img src="${UI_URL}tag_${t}.png" class="h-7" alt="${t}">`).join('')}
+                    <img src="${IMG_URL}${item.img}" class="w-full h-full object-cover rounded-[17px]">
+                    <div class="floating-bubble">
+                        <div class="bubble-content">
+                            <div class="flex items-center gap-2">
+                                <span class="font-black text-sm text-purple-900 whitespace-nowrap">${item.name}</span>
+                                <img src="${UI_URL}star${item.star}.png" class="h-3" onerror="this.style.display='none'">
+                            </div>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${(item.tags || []).map(t => `<img src="${UI_URL}tag_${t}.png" class="h-5" alt="${t}">`).join('')}
+                            </div>
                         </div>
                     </div>
-
-                    <div class="absolute bottom-3 left-0 right-0 text-center group-hover:hidden">
-                        <span class="bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-[#5D2E46]">${item.name}</span>
-                    </div>
                 `;
-                
                 container.appendChild(card);
-                setTimeout(() => card.classList.add('show'), i * 150);
             });
         }
 
-        function toggleChaosMode() { isChaosMode = !isChaosMode; document.getElementById('chaos-btn').classList.toggle('random-toggle-active'); }
         function updateVal(t) { document.getElementById(`${t}-val`).innerText = document.getElementById(`${t}-limit`).value; }
-        function toggleFilter() { document.getElementById('filter-panel').classList.toggle('open'); }
-        function toggleGroup(g, c) { document.querySelectorAll(`.${g}-item`).forEach(i => i.checked = c); updateParent(g); }
-        function updateParent(g) { const items = document.querySelectorAll(`.${g}-item`); document.getElementById(`all-${g}`).checked = [...items].length > 0 && [...items].every(i => i.checked); }
-
         init();
     </script>
 </body>
