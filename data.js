@@ -251,5 +251,3 @@ const CLOTH_DATABASE = [
 { id: 'hair400098', name: '澄澈诗篇', cat: 'hair', star: 4, tags: ['大地','复古'], img: '4/hair/hair400098.PNG' },
 //四星头发
 ];
-
-
