@@ -7,8 +7,8 @@ const CLOTH_DATABASE = [
 { id: 'hair200002', name: '十秒丸子头', cat: 'hair', star: 2, tags: [ ], img: 'hair200002.png' },
 { id: 'hair200003', name: '银灰羽絮', cat: 'hair', star: 2, tags: [ ], img: 'hair200003.png' },
 { id: 'hair200004', name: '满分优等生', cat: 'hair', star: 2, tags: [ ], img: 'hair200004.png' },
-{ id: 'dr200001', name: '雅静深绿', cat: 'dress', star: 2, tags: [ ], img: 'top200001.png' },
-{ id: 'dr200002', name: '月色迷离', cat: 'dress', star: 2, tags: [ ], img: 'top200002.png' },
+{ id: 'dr200001', name: '雅静深绿', cat: 'dress', star: 2, tags: [ ], img: 'dr200001.png' },
+{ id: 'dr200002', name: '月色迷离', cat: 'dress', star: 2, tags: [ ], img: 'dr200002.png' },
 { id: 'top200001', name: '梦想行者', cat: 'top', star: 2, tags: [ ], img: 'top200001.png' },
 { id: 'top200002', name: '酷夏黑星', cat: 'top', star: 2, tags: [ ], img: 'top200002.png' },
 { id: 'top200003', name: '心情启动', cat: 'top', star: 2, tags: [ ], img: 'top200003.png' },
@@ -42,7 +42,7 @@ const CLOTH_DATABASE = [
 { id: 'accear200002', name: '水中花', cat: 'acc_ear', star: 2, tags: [ ], img: 'accear200002.png' },
 { id: 'accwr200001', name: '粉红珠链', cat: 'acc_wrist', star: 2, tags: [ ], img: 'accwr200001.png' },
 { id: 'accwr200002', name: '雪花手环', cat: 'acc_wrist', star: 2, tags: [ ], img: 'accwr200002.png' },
-{ id: 'accwr200003', name: '幸运绳结', cat: 'acc_wrist', star: 2, tags: [ ], img: 'accwr200003.png' }
+{ id: 'accwr200003', name: '幸运绳结', cat: 'acc_wrist', star: 2, tags: [ ], img: 'accwr200003.png' },
 //二星全部服装
 { id: 'hair400001', name: '双子星螺旋', cat: 'hair', star: 4, tags: ['幻想'], img: '4/hair/hair400001.PNG' },
 { id: 'hair400002', name: '悠远之忆', cat: 'hair', star: 4, tags: ['复古'], img: '4/hair/hair400002.PNG' },
